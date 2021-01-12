@@ -1,6 +1,16 @@
 <template>
   <div id="app">
-    <p>{{ message }}</p>
+    <nav class="navbar navbar-expand-md navbar-dark bg-dark">
+      <a class="navbar-brand" href="#">タスク管理アプリ</a>
+    </nav>
+    <p class="h4">{{ message }}</p><br>
+    <p>生活や仕事に関するタスクを見える化して抜け漏れを防ぎましょう。</p><br>
+    <div class="text-center my-3">
+      <button type=button class="btn btn-dark">はじめる</button>
+    </div>
+    <footer class='footer-bottom text-center h6'>
+      <p>Copyright © 2019. RUNTEQ</p>
+    </footer>
   </div>
 </template>
 
@@ -8,7 +18,7 @@
 export default {
   data: function () {
     return {
-      message: "Hello Vue!"
+      message: "タスクを管理しよう！"
     }
   }
 }
@@ -16,7 +26,6 @@ export default {
 
 <style scoped>
 p {
-  font-size: 2em;
   text-align: center;
 }
 </style>

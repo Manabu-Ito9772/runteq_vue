@@ -50,7 +50,7 @@ $ bin/webpack-dev-server
 - 以上のコマンドが正しく実行できた場合、ブラウザで`localhost:3000`にアクセスしましょう。
 
 また、`foreman`でもサーバーを起動できるようにしています。
- 
+
 ```bash
 $ bundle exec foreman start
 ```
