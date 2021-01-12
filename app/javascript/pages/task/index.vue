@@ -27,9 +27,7 @@
       </div>
     </div>
     <div class="text-center">
-      <router-link to="/">
-        <button type="button" class="btn btn-dark mt-5">戻る</button>
-      </router-link>
+      <router-link to="/" class="btn btn-dark mt-5">戻る</router-link>
     </div>
     <footer class="mt-auto text-center">
       <small>Copyright &copy; 2020. RUNTEQ</small>
