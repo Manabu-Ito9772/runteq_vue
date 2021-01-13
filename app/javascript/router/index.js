@@ -1,31 +1,26 @@
-import Vue from 'vue'
-import Router from 'vue-router'
+import Vue from 'vue';
+import Router from 'vue-router';
+
+import TopIndex from "../pages/top/index";
+import TaskIndex from "../pages/task/index";
 
 Vue.use(Router)
 
-export default new Router({
+const router = new Router({
   mode: 'history',
-  // 2. historyモード
-  // routes.rbの設定が必要です。
-
-  // [URLの例]
-  // http://localhost:3000/
-  // http://localhost:3000/article/5
-  // http://localhost:3000/article/33
-  base: process.env.BASE_URL,
-
-  // ルーターの設定
   routes: [
     {
       path: '/',
-      name: 'Top',
-      component: () => import('../pages/top/index.vue')
+      component: TopIndex,
+      name: 'TopIndex',
     },
     {
       path: '/tasks',
-      name: 'Task',
-      component: () => import('../pages/task/index.vue')
+      component: TaskIndex,
+      name: 'TaskIndex',
     },
   ]
 
 })
+
+export default router
