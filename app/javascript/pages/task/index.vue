@@ -1,5 +1,5 @@
 <template>
-  <div id="app">
+  <div>
     <div class="d-flex">
       <div class="col-4 bg-light rounded shadow m-3 p-3">
         <div class="h4">TODO</div>
@@ -19,24 +19,17 @@ export default {
   name: 'TaskIndex',
   data() {
     return {
-      tasks: [
-        {
-          id: 1,
-          title: "スーパに買い物に行く"
-        },
-        {
-          id: 2,
-          title: "子供の迎えに行く"
-        },
-        {
-          id: 3,
-          title: "新聞を解約する"
-        },
-        {
-          id: 4,
-          title: "ゴミ出しをする"
-        },
-      ]
+      tasks: []
+    }
+  },
+  created() {
+    this.fetchTasks();
+  },
+  methods: {
+    fetchTasks() {
+      this.$axios.get("tasks")
+        .then(res => this.tasks = res.data)
+        .catch(err => console.log(err.status));
     }
   }
 }
