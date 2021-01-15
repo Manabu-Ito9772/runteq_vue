@@ -10,38 +10,51 @@
              class="bg-white border shadow-sm rounded my-2 p-4">
           <span>{{ task.title }}</span>
         </div>
+        <button @click="handleShowTaskCreateModal" type="button" class="btn btn-secondary">タスクを追加</button>
       </div>
     </div>
     <div class="text-center">
       <router-link to="/" class="btn btn-dark mt-5">戻る</router-link>
     </div>
     <TaskDetailModal v-if="isVisibleTaskDetailModal" :task="taskDetail" @close-modal="handleCloseTaskDetailModal" />
+    <TaskCreateModal v-if="isVisibleTaskCreateModal" @close-modal="handleCloseTaskCreateModal" @create-task="newTask"/>
   </div>
 </template>
 
 <script>
 import TaskDetailModal from './components/TaskDetailModal'
+import TaskCreateModal from './components/TaskCreateModal'
+import { mapGetters, mapActions } from 'vuex'
 
 export default {
   components: {
-    TaskDetailModal
+    TaskDetailModal,
+    TaskCreateModal,
   },
   name: 'TaskIndex',
   data() {
     return {
-      tasks: [],
       taskDetail: {},
-      isVisibleTaskDetailModal: false
+      isVisibleTaskDetailModal: false,
+      isVisibleTaskCreateModal: false,
     }
   },
   created() {
-    this.fetchTasks();
+    this.getTasks()
+  },
+  computed: {
+    ...mapGetters([
+      'tasks'
+    ])
   },
   methods: {
-    fetchTasks() {
-      this.$axios.get("tasks")
-        .then(res => this.tasks = res.data)
-        .catch(err => console.log(err.status));
+    ...mapActions([
+      'getTasks',
+      'createTask'
+    ]),
+    newTask(task) {
+      this.createTask(task)
+      this.handleCloseTaskCreateModal();
     },
     handleShowTaskDetailModal(task) {
       this.isVisibleTaskDetailModal = true;
@@ -50,7 +63,13 @@ export default {
     handleCloseTaskDetailModal() {
       this.isVisibleTaskDetailModal = false;
       this.taskDetail = {};
-    }
+    },
+    handleShowTaskCreateModal() {
+      this.isVisibleTaskCreateModal = true;
+    },
+    handleCloseTaskCreateModal() {
+      this.isVisibleTaskCreateModal = false;
+    },
   }
 }
 </script>
