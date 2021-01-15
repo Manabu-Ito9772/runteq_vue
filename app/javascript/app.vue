@@ -1,5 +1,5 @@
 <template>
-  <div class="d-flex flex-column min-vh-100">
+  <div id="app" class="d-flex flex-column min-vh-100">
     <TheHeader class="mb-auto" />
     <router-view />
     <TheFooter class="mt-auto" />
