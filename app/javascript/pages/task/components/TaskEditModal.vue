@@ -13,7 +13,7 @@
               <textarea class="form-control" id="description" rows="5" v-model="task.description"></textarea>
             </div>
             <div class="d-flex justify-content-between">
-              <button type="button" class="btn btn-success" @click="createTask">追加</button>
+              <button type="button" class="btn btn-success" @click="handleUpdateTask">更新</button>
               <button type="button" class="btn btn-secondary" @click="handleCloseModal">閉じる</button>
             </div>
           </div>
@@ -27,11 +27,19 @@
 <script>
 export default {
   name: 'TaskCreateModal',
-  data() {
-    return {
-      task: {
-        title: '',
-        description: ''
+  props: {
+    task: {
+      id: {
+        type: Number,
+        required: true
+      },
+      title: {
+        type: String,
+        required: true
+      },
+      description: {
+        type: String,
+        required: true
       }
     }
   },
@@ -39,8 +47,8 @@ export default {
     handleCloseModal() {
       this.$emit('close-modal')
     },
-    createTask() {
-      this.$emit('create-task', this.task)
+    handleUpdateTask() {
+      this.$emit('update-task', this.task)
     }
   }
 }
