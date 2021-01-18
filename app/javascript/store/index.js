@@ -9,7 +9,9 @@ export default new Vuex.Store({
     tasks: []
   },
   getters: {
-    tasks: state => state.tasks
+    todoTasks: state => state.tasks.filter((task) => task.status == 'todo'),
+    doingTasks: state => state.tasks.filter((task) => task.status == 'doing'),
+    doneTasks: state => state.tasks.filter((task) => task.status == 'done')
     // ↓もしくは
     // tasks(state) {
   	// 	return state.tasks
@@ -53,8 +55,8 @@ export default new Vuex.Store({
       // })
       return axios.post('tasks', task)
         .then(res => {
-        commit('addTask', res.data)
-      })
+          commit('addTask', res.data)
+        })
     },
     updateTask({commit}, task) {
       return axios.patch(`tasks/${task.id}`, task)

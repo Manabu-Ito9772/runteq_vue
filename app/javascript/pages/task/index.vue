@@ -1,17 +1,24 @@
 <template>
-  <div>
-    <div class="d-flex">
-      <div class="col-4 bg-light rounded shadow m-3 p-3">
-        <div class="h4">TODO</div>
-        <div v-for="task in tasks"
-             :key="task.id"
-             :id="'task-' + task.id"
-             @click="handleShowTaskDetailModal(task)"
-             class="bg-white border shadow-sm rounded my-2 p-4">
-          <span>{{ task.title }}</span>
-        </div>
-        <button @click="handleShowTaskCreateModal" type="button" class="btn btn-secondary">タスクを追加</button>
-      </div>
+  <div class="container-fluid">
+    <div class="row">
+      <TaskList :tasks="todoTasks" id="todo-list" @show-detail-modal="handleShowTaskDetailModal">
+        <template v-slot:header>
+          <div class="h4">TODO</div>
+        </template>
+      </TaskList>
+      <TaskList :tasks="doingTasks" id="doing-list" @show-detail-modal="handleShowTaskDetailModal">
+        <template v-slot:header>
+          <div class="h4">DOING</div>
+        </template>
+      </TaskList>
+      <TaskList :tasks="doneTasks" id="done-list" @show-detail-modal="handleShowTaskDetailModal">
+        <template v-slot:header>
+          <div class="h4">DONE</div>
+        </template>
+      </TaskList>
+    </div>
+    <div class="text-center">
+      <button @click="handleShowTaskCreateModal" type="button" class="btn btn-secondary">タスクを追加</button>
     </div>
     <div class="text-center">
       <router-link to="/" class="btn btn-dark mt-5">戻る</router-link>
@@ -24,15 +31,21 @@
                        @delete-task="handleDeleteTask"/>
     </transition>
     <transition name="fade">
-      <TaskCreateModal v-if="isVisibleTaskCreateModal" @close-modal="handleCloseTaskCreateModal" @create-task="newTask"/>
+      <TaskCreateModal v-if="isVisibleTaskCreateModal"
+                       @close-modal="handleCloseTaskCreateModal"
+                       @create-task="newTask"/>
     </transition>
     <transition name="fade">
-      <TaskEditModal v-if="isVisibleTaskEditModal" @close-modal="handleCloseTaskEditModal" @update-task="handleUpdateTask" :task="taskEdit"/>
+      <TaskEditModal v-if="isVisibleTaskEditModal"
+                     @close-modal="handleCloseTaskEditModal"
+                     @update-task="handleUpdateTask"
+                     :task="taskEdit"/>
     </transition>
   </div>
 </template>
 
 <script>
+import TaskList from './components/TaskList'
 import TaskDetailModal from './components/TaskDetailModal'
 import TaskCreateModal from './components/TaskCreateModal'
 import TaskEditModal from './components/TaskEditModal'
@@ -40,6 +53,7 @@ import { mapGetters, mapActions } from 'vuex'
 
 export default {
   components: {
+    TaskList,
     TaskDetailModal,
     TaskCreateModal,
     TaskEditModal,
@@ -51,14 +65,18 @@ export default {
       isVisibleTaskDetailModal: false,
       isVisibleTaskCreateModal: false,
       isVisibleTaskEditModal: false,
-      taskEdit: {}
+      taskEdit: {},
     }
   },
   created() {
     this.getTasks();
   },
   computed: {
-    ...mapGetters([ 'tasks' ])
+    ...mapGetters([
+      'todoTasks',
+      'doingTasks',
+      'doneTasks'
+    ])
   },
   methods: {
     ...mapActions([
