@@ -1,5 +1,7 @@
 <template>
-  <span>{{ task.title }}</span>
+  <div :id="'task-' + task.id">
+    <span>{{ task.title }}</span>
+  </div>  
 </template>
 
 <script>
