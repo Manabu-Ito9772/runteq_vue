@@ -1,45 +1,81 @@
 <template>
   <div class="container-fluid">
     <div class="row">
-      <TaskList :tasks="todoTasks" id="todo-list" @show-detail-modal="handleShowTaskDetailModal">
-        <template v-slot:header>
-          <div class="h4">TODO</div>
+      <TaskList
+        id="todo-list"
+        :tasks="todoTasks"
+        @handleShowTaskDetailModal="handleShowTaskDetailModal"
+      >
+        <template #header>
+          <div class="h4">
+            TODO
+          </div>
         </template>
       </TaskList>
-      <TaskList :tasks="doingTasks" id="doing-list" @show-detail-modal="handleShowTaskDetailModal">
-        <template v-slot:header>
-          <div class="h4">DOING</div>
+      <TaskList
+        id="doing-list"
+        :tasks="doingTasks"
+        @handleShowTaskDetailModal="handleShowTaskDetailModal"
+      >
+        <template #header>
+          <div class="h4">
+            DOING
+          </div>
         </template>
       </TaskList>
-      <TaskList :tasks="doneTasks" id="done-list" @show-detail-modal="handleShowTaskDetailModal">
-        <template v-slot:header>
-          <div class="h4">DONE</div>
+      <TaskList
+        id="done-list"
+        :tasks="doneTasks"
+        @handleShowTaskDetailModal="handleShowTaskDetailModal"
+      >
+        <template #header>
+          <div class="h4">
+            DONE
+          </div>
         </template>
       </TaskList>
     </div>
     <div class="text-center">
-      <button @click="handleShowTaskCreateModal" type="button" class="btn btn-secondary">タスクを追加</button>
+      <button
+        type="button"
+        class="btn btn-secondary"
+        @click="handleShowTaskCreateModal"
+      >
+        タスクを追加
+      </button>
     </div>
     <div class="text-center">
-      <router-link to="/" class="btn btn-dark mt-5">戻る</router-link>
+      <router-link
+        to="/"
+        class="btn btn-dark mt-5"
+      >
+        戻る
+      </router-link>
     </div>
     <transition name="fade">
-      <TaskDetailModal v-if="isVisibleTaskDetailModal"
-                       :task="taskDetail"
-                       @close-modal="handleCloseTaskDetailModal"
-                       @show-edit-modal="handleShowTaskEditModal"
-                       @delete-task="handleDeleteTask"/>
+      <TaskDetailModal
+        v-if="isVisibleTaskDetailModal"
+        :task="taskDetail"
+        @close-modal="handleCloseTaskDetailModal"
+        @show-edit-modal="handleShowTaskEditModal"
+        @delete-task="handleDeleteTask"
+      />
     </transition>
     <transition name="fade">
-      <TaskCreateModal v-if="isVisibleTaskCreateModal"
-                       @close-modal="handleCloseTaskCreateModal"
-                       @create-task="newTask"/>
+      <TaskCreateModal
+        v-if="isVisibleTaskCreateModal"
+        @close-modal="handleCloseTaskCreateModal"
+        @create-task="newTask"
+      />
     </transition>
     <transition name="fade">
-      <TaskEditModal v-if="isVisibleTaskEditModal"
-                     @close-modal="handleCloseTaskEditModal"
-                     @update-task="handleUpdateTask"
-                     :task="taskEdit"/>
+      <TaskEditModal
+        v-if="isVisibleTaskEditModal"
+        :task="taskEdit"
+        task_prop.sync="task"
+        @close-modal="handleCloseTaskEditModal"
+        @update-task="handleUpdateTask"
+      />
     </transition>
   </div>
 </template>
@@ -52,13 +88,13 @@ import TaskEditModal from './components/TaskEditModal'
 import { mapGetters, mapActions } from 'vuex'
 
 export default {
+  name: 'TaskIndex',
   components: {
     TaskList,
     TaskDetailModal,
     TaskCreateModal,
     TaskEditModal,
   },
-  name: 'TaskIndex',
   data() {
     return {
       taskDetail: {},
@@ -68,18 +104,31 @@ export default {
       taskEdit: {},
     }
   },
+  computed: {
+    ...mapGetters('taskModule', [
+      "tasks"
+    ]),
+    todoTasks() {
+      return this.tasks.filter(task => {
+        return task.status == "todo"
+      })
+    },
+    doingTasks() {
+      return this.tasks.filter(task => {
+        return task.status == "doing"
+      })
+    },
+    doneTasks() {
+      return this.tasks.filter(task => {
+        return task.status == "done"
+      })
+    }
+  },
   created() {
     this.getTasks();
   },
-  computed: {
-    ...mapGetters([
-      'todoTasks',
-      'doingTasks',
-      'doneTasks'
-    ])
-  },
   methods: {
-    ...mapActions([
+    ...mapActions('taskModule', [
       'getTasks',
       'createTask',
       'updateTask',

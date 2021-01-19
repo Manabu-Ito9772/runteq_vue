@@ -1,14 +1,19 @@
 <template>
   <div class="col-12 col-lg-4">
-    <div :id="id" class="bg-light rounded shadow m-3 p-3">
-      <slot name="header"></slot>
-      <div v-for="task in tasks"
-           :key="task.id"
-           :id="'task-' + task.id"
-           @click="handleShowTaskDetailModal(task)"
-           class="bg-white border shadow-sm rounded my-2 p-4">
-        <TaskItem :task="task" />
-      </div>
+    <div
+      :id="id"
+      class="bg-light rounded shadow m-3 p-3"
+    >
+      <slot name="header">
+        タスク区分
+      </slot>
+      <template v-for="task in tasks">
+        <TaskItem
+          :key="task.id"
+          :task="task"
+          @handleShowTaskDetailModal="$listeners['handleShowTaskDetailModal']"
+        />
+      </template>
     </div>
   </div>
 </template>
@@ -17,12 +22,16 @@
 import TaskItem from './TaskItem'
 
 export default {
-  components: { TaskItem },
   name: 'TaskList',
-  props: [ 'tasks', 'id' ],
-  methods: {
-    handleShowTaskDetailModal(task) {
-      this.$emit('show-detail-modal', task)
+  components: { TaskItem },
+  props: {
+    tasks: {
+      type: Array,
+      required: true
+    },
+    taskListId: {
+      type: String,
+      required: true
     }
   }
 }
