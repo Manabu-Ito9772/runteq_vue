@@ -71,7 +71,7 @@
 export default {
   name: 'TaskCreateModal',
   props: {
-    taskProp: {
+    taskedit: {
       type: Object,
       required: true,
       id: {
@@ -90,6 +90,11 @@ export default {
         type: String,
         required: true
       }
+    }
+  },
+  data() {
+    return {
+      task: this.taskedit
     }
   },
   methods :{

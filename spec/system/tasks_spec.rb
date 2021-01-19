@@ -98,6 +98,7 @@ RSpec.describe "Tasks", type: :system do
     task = create(:task, title: 'JavaScriptのfor文を理解する', description: 'JavaScript本格入門の第二章に書かれているfor文を読んで理解する')
     visit '/tasks'
     find("#task-#{task.id}").click
+    page.save_screenshot 'screenshot.png'
     within "#task-detail-modal-#{task.id}" do
       click_on '編集'
     end

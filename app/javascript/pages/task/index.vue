@@ -71,8 +71,7 @@
     <transition name="fade">
       <TaskEditModal
         v-if="isVisibleTaskEditModal"
-        :task="taskEdit"
-        task_prop.sync="task"
+        :taskedit.sync="taskEdit"
         @close-modal="handleCloseTaskEditModal"
         @update-task="handleUpdateTask"
       />
