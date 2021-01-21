@@ -218,7 +218,7 @@ RSpec.describe 'タスク管理', type: :system do
   it '自分のタスクには「編集」と「削除」ボタンが表示される' do
     my_task = create(:task, title: '自分のタスク', user: user)
     login_as(user)
-    # 自分のタスク詳細モーダルを表示する
+    # 自分のタスク詳細モーダルを表示す
     find("#task-#{my_task.id}").click
     expect(page).to have_content('編集'), '自分のタスクに編集ボタンが表示されていません'
     expect(page).to have_content('削除'), '自分のタスクに削除ボタンが表示されていません'
