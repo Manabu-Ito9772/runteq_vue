@@ -6,35 +6,49 @@
     <div class="h3 mb-3">
       ログイン
     </div>
-    <div class="form-group text-left">
-      <label for="email">メールアドレス</label>
-      <input
-        id="email"
-        v-model="user.email"
-        name="メールアドレス"
-        type="email"
-        placeholder="test@example.com"
-        class="form-control"
+    <ValidationObserver v-slot="{ handleSubmit }">
+      <div class="form-group text-left">
+        <ValidationProvider
+          v-slot="{ errors }"
+          rules="required|email"
+        >
+          <label for="email">メールアドレス</label>
+          <input
+            id="email"
+            v-model="user.email"
+            name="メールアドレス"
+            type="email"
+            placeholder="test@example.com"
+            class="form-control"
+          >
+          <span class="text-danger">{{ errors[0] }}</span>
+        </ValidationProvider>
+      </div>
+      <div class="form-group text-left">
+        <ValidationProvider
+          v-slot="{ errors }"
+          rules="required|min:3"
+        >
+          <label for="password">パスワード</label>
+          <input
+            id="password"
+            v-model="user.password"
+            name="パスワード"
+            type="password"
+            placeholder="password"
+            class="form-control"
+          >
+          <span class="text-danger">{{ errors[0] }}</span>
+        </ValidationProvider>
+      </div>
+      <button
+        type="submit"
+        class="btn btn-primary"
+        @click="handleSubmit(login)"
       >
-    </div>
-    <div class="form-group text-left">
-      <label for="password">パスワード</label>
-      <input
-        id="password"
-        v-model="user.password"
-        name="パスワード"
-        type="password"
-        placeholder="password"
-        class="form-control"
-      >
-    </div>
-    <button
-      type="submit"
-      class="btn btn-primary"
-      @click="login"
-    >
-      ログイン
-    </button>
+        ログイン
+      </button>
+    </ValidationObserver>
   </div>
 </template>
 
