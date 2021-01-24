@@ -11,8 +11,20 @@ class Api::UsersController < ApplicationController
     end
   end
 
+  def update
+    avatar = params[:avatar]
+    name = params[:name]
+    current_user.avatar = avatar
+    current_user.name = name
+    if current_user.save
+      render json: current_user
+    else
+      render json: current_user.errors, status: :bad_request
+    end
+  end
+
   def me
-    render json: current_user
+    render json: current_user, methods: [:avatar_url]
   end
 
   private

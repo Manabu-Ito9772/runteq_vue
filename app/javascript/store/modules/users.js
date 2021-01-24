@@ -49,6 +49,10 @@ const actions = {
       commit('setUser', null)
       return null
     }
+  },
+  async updateUser({commit}) {
+    const userResponse = await axios.get('users/me')
+    commit('setUser', userResponse.data)
   }
 }
 
