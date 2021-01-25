@@ -96,9 +96,9 @@ RSpec.describe 'ユーザー機能', type: :system do
     login_as(user)
     visit '/profile'
     fill_in 'ユーザー名', with: 'らんてっくたろう'
-    file_path = Rails.root.join('spec', 'fixtures', 'images', 'runtequn.jpg')
+    file_path = Rails.root.join('spec', 'fixtures', 'images', 'cover.jpg')
     attach_file('プロフィール画像', file_path)
     click_on '更新'
-    expect(page).to have_selector("img[src$='runtequn.jpg']"), 'プロフィール画像のアップロードができていません'
+    expect(page).to have_selector("img[src$='cover.jpg']"), 'プロフィール画像のアップロードができていません'
   end
 end

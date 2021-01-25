@@ -1,9 +1,18 @@
 <template>
   <div class="container-fluid">
-    <div id="search-form" class="form-row p-3">
+    <div
+      id="search-form"
+      class="form-row p-3"
+    >
       <div class="form-group col-lg-6 offset-lg-3">
         <label for="search">絞り込み</label>
-        <input type="text" id="search" placeholder="タスク名を入力してください" class="form-control" v-model="searchTask">
+        <input
+          id="search"
+          v-model="searchTask"
+          type="text"
+          placeholder="タスク名を入力してください"
+          class="form-control"
+        >
       </div>
     </div>
     <div class="row">
@@ -115,56 +124,25 @@ export default {
     ...mapGetters('tasks', ["tasks"]),
     ...mapGetters("users", ["authUser"]),
     todoTasks() {
-      let filtered = [];
-      for (let i in this.tasks) {
-        let task = this.tasks[i];
-        if (task.title.indexOf(this.searchTask) !== -1) {
-          filtered.push(task);
-        }
-      }
-      return filtered.filter(task => {
+      return this.filteredTasks.filter(task => {
         return task.status == "todo"
       })
     },
     doingTasks() {
-      let filtered = [];
-      for (let i in this.tasks) {
-        let task = this.tasks[i];
-        if (task.title.indexOf(this.searchTask) !== -1) {
-          filtered.push(task);
-        }
-      }
-      return filtered.filter(task => {
+      return this.filteredTasks.filter(task => {
         return task.status == "doing"
       })
     },
     doneTasks() {
-      let filtered = [];
-      for (let i in this.tasks) {
-        let task = this.tasks[i];
-        if (task.title.indexOf(this.searchTask) !== -1) {
-          filtered.push(task);
-        }
-      }
-      return filtered.filter(task => {
+      return this.filteredTasks.filter(task => {
         return task.status == "done"
       })
     },
-    // todoTasks() {
-    //   return this.tasks.filter(task => {
-    //     return task.status == "todo"
-    //   })
-    // },
-    // doingTasks() {
-    //   return this.tasks.filter(task => {
-    //     return task.status == "doing"
-    //   })
-    // },
-    // doneTasks() {
-    //   return this.tasks.filter(task => {
-    //     return task.status == "done"
-    //   })
-    // }
+    filteredTasks() {
+      return this.tasks.filter(task => {
+        return task.title.indexOf(this.searchTask) != -1
+      })
+    }
   },
   created() {
     this.getTasks();
@@ -179,6 +157,7 @@ export default {
     async newTask(task) {
       try {
         await this.createTask(task);
+        this.resetSearchTask();
         this.handleCloseTaskCreateModal();
       } catch(error) {
         console.log(error);
@@ -187,6 +166,7 @@ export default {
     async handleUpdateTask(task) {
       try {
         await this.updateTask(task);
+        this.resetSearchTask();
         this.handleCloseTaskEditModal();
       } catch(error) {
         console.log(error);
@@ -199,6 +179,9 @@ export default {
       } catch(error) {
         console.log(error);
       }
+    },
+    resetSearchTask() {
+      this.searchTask = ""
     },
     handleShowTaskDetailModal(task) {
       this.isVisibleTaskDetailModal = true;
