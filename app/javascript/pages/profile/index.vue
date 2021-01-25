@@ -15,40 +15,42 @@
           <label for="name">ユーザー名</label>
           <input
             id="name"
-            v-model="name"
+            v-model="user.name"
             name="ユーザー名"
             type="text"
             class="form-control"
+            placeholder="username"
           >
           <span class="text-danger">{{ errors[0] }}</span>
         </ValidationProvider>
       </div>
       <div class="form-group text-left">
-        <!-- <ValidationProvider
+        <!-- eslint-disable vue/no-unused-vars -->
+        <ValidationProvider
           v-slot="{ errors }"
-          rules="required"
-        > -->
-        <label
-          for="avatar"
-          class="d-block mb-4"
-        >プロフィール画像</label>
-        <div class="nav-item active avatar-image-wrapper">
-          <img
-            :src="avatar"
-            class="rounded avatar-image mb-4"
-            style="width: 200px"
-          >
-        </div>
-        <input
-          id="avatar"
-          name="ユーザー名"
-          type="file"
-          accept="image/png,image/jpeg"
-          class="form-control-file"
-          @change="setAvatar"
+          ref="provider"
+          name="プロフィール画像"
+          rules="image"
         >
-        <!-- <span class="text-danger">{{ errors[0] }}</span>
-        </ValidationProvider> -->
+          <!-- eslint-enable vue/no-unused-vars -->
+          <label
+            for="avatar"
+            class="d-block"
+          >プロフィール画像</label>
+          <img
+            :src="user.avatar_url"
+            class="my-3"
+            width="150px"
+          >
+          <input
+            id="avatar"
+            type="file"
+            accept="image/png,image/jpeg"
+            class="form-control-file"
+            @change="handleChange"
+          >
+          <span class="text-danger">{{ errors[0] }}</span>
+        </ValidationProvider>
       </div>
       <button
         type="submit"
@@ -68,59 +70,36 @@ export default {
   name: 'ProfileIndex',
   data() {
     return {
-      id: null,
-      name: '',
-      uploadAvatar: null,
-      avatar: null,
-      a: null
+      user: {
+        name: "",
+        avatar_url: ""
+      },
+      uploadAvatar: ""
     }
   },
   computed: {
     ...mapGetters('users', ['authUser'])
   },
   created() {
-    this.setUser();
+    this.user = Object.assign({}, this.authUser)
   },
   methods: {
     ...mapActions('users', ['updateUser']),
-    setUser() {
-      this.id = this.authUser.id
-      this.name = this.authUser.name
-      this.avatar = this.authUser.avatar_url
-    },
-    setAvatar(e) {
-      e.preventDefault();
-      let files = e.target.files;
-      this.uploadAvatar = files[0];
+    async handleChange(event) {
+      const { valid } = await this.$refs.provider.validate(event)
+      if (valid) this.uploadAvatar = event.target.files[0]
     },
     update() {
-      let formData = new FormData();
-      formData.append('avatar', this.uploadAvatar);
-      formData.append('name', this.name);
-      let config = {
-        headers: {
-         'content-type': 'multipart/form-data'
-        }
-      };
-      this.$axios.patch(`users/${this.id}`, formData, config)
-        .then(res => {
-          this.uploadAvatar = null;
-        })
-        .catch(err => {
-          console.log(err)
-        })
-        .then(res => {
-          this.updateUser();
-        })
-        .catch(err => {
-          console.log(err)
-        })
-        .then(res => {
-          this.$router.push('/tasks');
-        })
-        .catch(err => {
-          console.log(err)
-        })
+      const formData = new FormData()
+      formData.append("user[name]", this.user.name)
+      if (this.uploadAvatar) formData.append("user[avatar]", this.uploadAvatar)
+
+      try {
+        this.updateUser(formData)
+        this.$router.push({ name: "TaskIndex" })
+      } catch (error) {
+        console.log(error);
+      }
     },
   }
 }

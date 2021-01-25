@@ -26,7 +26,6 @@
             <img
               :src="authUser.avatar_url"
               class="rounded avatar-image"
-              style="width: 20px"
             >
           </li>
           <li class="nav-item active">
@@ -75,4 +74,10 @@ export default {
 </script>
 
 <style scoped>
+.avatar-image-wrapper {
+  line-height: 40px;
+}
+.avatar-image {
+  width: 20px;
+}
 </style>

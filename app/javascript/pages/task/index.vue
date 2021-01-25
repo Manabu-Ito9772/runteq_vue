@@ -1,5 +1,11 @@
 <template>
   <div class="container-fluid">
+    <div id="search-form" class="form-row p-3">
+      <div class="form-group col-lg-6 offset-lg-3">
+        <label for="search">絞り込み</label>
+        <input type="text" id="search" placeholder="タスク名を入力してください" class="form-control" v-model="searchTask">
+      </div>
+    </div>
     <div class="row">
       <TaskList
         id="todo-list"
@@ -102,26 +108,63 @@ export default {
       isVisibleTaskCreateModal: false,
       isVisibleTaskEditModal: false,
       taskEdit: {},
+      searchTask: '',
     }
   },
   computed: {
     ...mapGetters('tasks', ["tasks"]),
     ...mapGetters("users", ["authUser"]),
     todoTasks() {
-      return this.tasks.filter(task => {
+      let filtered = [];
+      for (let i in this.tasks) {
+        let task = this.tasks[i];
+        if (task.title.indexOf(this.searchTask) !== -1) {
+          filtered.push(task);
+        }
+      }
+      return filtered.filter(task => {
         return task.status == "todo"
       })
     },
     doingTasks() {
-      return this.tasks.filter(task => {
+      let filtered = [];
+      for (let i in this.tasks) {
+        let task = this.tasks[i];
+        if (task.title.indexOf(this.searchTask) !== -1) {
+          filtered.push(task);
+        }
+      }
+      return filtered.filter(task => {
         return task.status == "doing"
       })
     },
     doneTasks() {
-      return this.tasks.filter(task => {
+      let filtered = [];
+      for (let i in this.tasks) {
+        let task = this.tasks[i];
+        if (task.title.indexOf(this.searchTask) !== -1) {
+          filtered.push(task);
+        }
+      }
+      return filtered.filter(task => {
         return task.status == "done"
       })
-    }
+    },
+    // todoTasks() {
+    //   return this.tasks.filter(task => {
+    //     return task.status == "todo"
+    //   })
+    // },
+    // doingTasks() {
+    //   return this.tasks.filter(task => {
+    //     return task.status == "doing"
+    //   })
+    // },
+    // doneTasks() {
+    //   return this.tasks.filter(task => {
+    //     return task.status == "done"
+    //   })
+    // }
   },
   created() {
     this.getTasks();

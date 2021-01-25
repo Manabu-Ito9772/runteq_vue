@@ -50,9 +50,11 @@ const actions = {
       return null
     }
   },
-  async updateUser({commit}) {
-    const userResponse = await axios.get('users/me')
-    commit('setUser', userResponse.data)
+  updateUser({ commit, state }, user) {
+    return axios.patch(`profile/${state.authUser.id}`, user)
+      .then(res => {
+        commit('setUser', res.data)
+      })
   }
 }
 

@@ -8,6 +8,7 @@ Rails.application.routes.draw do
         get 'me'
       end
     end
+    resources :profile
   end
   get '*path', to: 'home#index', constraints: lambda { |req|
     # 'rails/active_storage'が含まれているパスはリダイレクト対象外にする

@@ -6,7 +6,8 @@ import {
 } from 'vee-validate'
 import {
   email,
-  required
+  required,
+  image
 } from 'vee-validate/dist/rules';
 
 Vue.component('ValidationObserver', ValidationObserver)
@@ -20,6 +21,11 @@ extend('email', {
 extend('required', {
   ...required,
   message: '{_field_}は必須項目です'
+});
+
+extend('image', {
+  ...image,
+  message: '{_field_}は画像形式で入力してください'
 });
 
 extend('min', {
